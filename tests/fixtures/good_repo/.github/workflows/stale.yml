@@ -1,0 +1,16 @@
+name: Stale
+on:
+  schedule:
+    - cron: "43 2 * * 1"
+permissions: {}
+jobs:
+  stale:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/stale@5bef64f19d7facfb25b37b414482c7164d639639 # v9.1.0
+        with:
+          days-before-stale: 60

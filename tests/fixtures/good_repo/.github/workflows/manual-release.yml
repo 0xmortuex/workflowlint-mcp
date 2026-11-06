@@ -1,0 +1,32 @@
+name: Manual release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version to release
+        required: true
+        type: string
+      dry_run:
+        type: boolean
+        default: true
+permissions:
+  contents: read
+concurrency:
+  group: manual-release
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment: production
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Tag
+        if: ${{ !inputs.dry_run }}
+        run: |
+          git tag "v${VERSION}"
+          git push origin "v${VERSION}"
+        env:
+          VERSION: ${{ inputs.version }}
